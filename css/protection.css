@@ -1,0 +1,26 @@
+#devtoolsBlockOverlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #000;
+    z-index: 2147483647;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+#devtoolsBlockOverlay.active {
+    display: flex;
+}
+#devtoolsBlockOverlay span {
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    background: linear-gradient(90deg, #ff4d9d, #ff85c1, #ffb3d9);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 1px;
+    padding: 0 20px;
+    text-shadow: 0 0 30px rgba(255, 77, 157, 0.4);
+}
