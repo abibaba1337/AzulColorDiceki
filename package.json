@@ -1,0 +1,6 @@
+{
+  "name": "azul-dice",
+  "version": "2.0.0",
+  "description": "Azul Dice - color dice roller with real server-side odds, deployable on Vercel.",
+  "private": true
+}
