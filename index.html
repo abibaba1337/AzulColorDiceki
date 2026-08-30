@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" style="--theme-accent: #FFD700; --theme-accent-dark: #D4AF37; --theme-panel-border: rgba(255, 255, 255, 0.6); --theme-panel-bg: rgba(15, 15, 15, 0.85);">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azul Dice</title>
+  <meta name="description" content="Play Azul Dice! The ultimate custom color dice simulator used by top TikTok streamers. Roll the dice now!">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Lilita+One&family=Luckiest+Guy&family=Montserrat:wght@600;800;900&family=Outfit:wght@500;700;800;900&family=Press+Start+2P&family=Righteous&family=Russo+One&family=Bangers&family=Bungee&family=Permanent+Marker&family=Anton&family=Orbitron:wght@700;900&family=Baloo+2:wght@700;800&family=VT323&family=Rubik+Mono+One&family=Passion+One:wght@700;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body id="bodyTag" class="bg-animated" style="background-image: radial-gradient(circle at 25% 20%, rgba(255,255,255,0.28), transparent 40%), radial-gradient(circle at 78% 75%, rgba(255,255,255,0.18), transparent 45%), linear-gradient(120deg, #2b0a3d, #6a0dad, #ff2fb0, #00e5ff);">
+  <div id="introGate" class="intro-gate">
+    <h1 class="intro-gate-title">AZUL MOG YOU</h1>
+    <div class="intro-gate-subtitle">
+      <div>My TikTok: <span class="handle">@bekon_gag</span></div>
+      <div>My TGK: <span class="handle">@StealaBekonTwo</span></div>
+    </div>
+    <button class="intro-gate-btn" onclick="dismissIntroGate()">LEEETS GOO <span class="dice-emoji">🎲</span></button>
+  </div>
+
+
+  <div id="immersiveDecor" class="immersive-decor"></div>
+
+  <div class="top-btn-row">
+    <button class="top-support-btn" onclick="openSupport()" title="Support" data-i18n-title="topSupport">💬 <span data-i18n="topSupport">Support</span></button>
+    <button class="top-support-btn top-telegram-btn" onclick="window.open('https://t.me/StealaBekonTwo','_blank','noopener')" title="Telegram" data-i18n-title="topTelegram">✈️ <span data-i18n="topTelegram">Telegram</span></button>
+    <button class="top-lang-btn" onclick="openLanguageModal()" title="Language" data-i18n-title="topLanguage">🌐</button>
+    <button class="top-settings-btn" onclick="openSettings()" title="Settings" data-i18n-title="topSettings">⚙️</button>
+  </div>
+
+  <header style="text-align: center; padding: 20px 0;">
+    <img id="headerLogo" src="assets/azul-dice-logo.png" alt="Azul Dice" style="max-width: 520px; width: 92%; height: auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); transition: opacity 0.15s;">
+  </header>
+
+  <div class="main-layout">
+    <main class="game-center">
+      <div class="player-counter" id="playerCounter" title="Players online right now">
+        <span class="player-counter-dot"></span>
+        <span id="playerCounterText">1 players</span>
+      </div>
+      <h3 class="roll-title" id="rollTitle">Roll Color Dice</h3>
+      <a href="#" class="roll-subtitle-link">azul-dices.vercel.app</a>
+      
+      <div class="controls">
+        <select id="diceCount" onchange="renderInitialDice(); updateMatchChances();">
+          <option value="1">1 DICE</option>
+          <option value="2">2 DICE</option>
+          <option value="3">3 DICE</option>
+          <option value="4" selected>4 DICE</option>
+          <option value="5">5 DICE</option>
+          <option value="6">6 DICE</option>
+        </select>
+
+        <button id="blurToggleBtn" class="controls-blur-btn" onclick="toggleBlurMode()" data-i18n="blurOff">BLUR OFF</button>
+      </div>
+
+      <div class="dice-display" id="diceContainer"></div>
+
+      <div style="text-align: center; color: white;">
+        <span data-i18n="idLabel">ID:</span> <strong id="gameIdDisplay" style="font-size: 20px; letter-spacing: 1px;">-</strong>
+      </div>
+
+      <div class="roll-mode-switch-row">
+        <span data-i18n="againLabel">Again</span>
+        <label class="roll-mode-switch">
+          <input type="checkbox" id="rollModeToggle" onchange="toggleRollMode()">
+          <span class="roll-mode-slider"></span>
+        </label>
+        <span data-i18n="fastLabel">Fast</span>
+        <button id="anonModeBtn" class="anon-mode-btn" onclick="toggleAnonMode()" title="Swap the logo" data-i18n="anonModeBtn" data-i18n-title="anonModeBtnTitle">Anon.Mode</button>
+      </div>
+
+      <button id="rollBtn" class="roll-btn" onclick="rollDice()" data-i18n="rollAgainBtn">ROLL AGAIN !</button>
+      <button id="megaBtn" class="roll-btn btn-ultra" onclick="rollDiceUltra()" data-i18n="ultraRollBtn">✦ ULTRA ROLL! ✦</button>
+
+      <div class="counter-group">
+        <div class="counter-group-title" data-i18n="garamsTitle">Гарамы</div>
+        <div class="counter-row">
+          <div class="counter-side side-left">
+            <span onclick="adjustCounter('garam', -1)">-1</span>
+            <span onclick="adjustCounter('garam', -10)">-10</span>
+          </div>
+          <div class="counter-center-wrap">
+            <img id="counterBgPlus_garam" class="counter-bg-img side-plus" src="assets/counter-bg-plus-garam.webp" alt="">
+            <img id="counterBgMinus_garam" class="counter-bg-img side-minus" src="assets/counter-bg-minus-garam.webp" alt="">
+            <div class="counter-center" id="mainCounter_garam">+0</div>
+          </div>
+          <div class="counter-side side-right">
+            <span onclick="adjustCounter('garam', 1)">+1</span>
+            <span onclick="adjustCounter('garam', 10)">+10</span>
+          </div>
+        </div>
+
+        <div class="counter-icons-row">
+          <button class="counter-icon-btn plus" onclick="adjustCounterIcon('garam','plus')" title="Add with icon">
+            <img src="assets/garam-plus-icon.webp" alt="Garam plus icon">
+            <span class="counter-icon-label">+1</span>
+            <span class="counter-icon-badge" id="plusIconCount_garam">0</span>
+          </button>
+          <button class="counter-icon-btn minus" onclick="adjustCounterIcon('garam','minus')" title="Subtract with icon">
+            <img src="assets/garam-minus-icon.webp" alt="Garam minus icon">
+            <span class="counter-icon-label">-1</span>
+            <span class="counter-icon-badge" id="minusIconCount_garam">0</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="counter-group">
+        <div class="counter-group-title" data-i18n="dragonsTitle">Драконы</div>
+        <div class="counter-row">
+          <div class="counter-side side-left">
+            <span onclick="adjustCounter('dragon', -1)">-1</span>
+            <span onclick="adjustCounter('dragon', -10)">-10</span>
+          </div>
+          <div class="counter-center-wrap">
+            <img id="counterBgPlus_dragon" class="counter-bg-img side-plus" src="assets/counter-bg-plus-dragon.webp" alt="">
+            <img id="counterBgMinus_dragon" class="counter-bg-img side-minus dragon-minus-img" src="assets/counter-bg-minus-dragon.webp" alt="">
+            <div class="counter-center" id="mainCounter_dragon">+0</div>
+          </div>
+          <div class="counter-side side-right">
+            <span onclick="adjustCounter('dragon', 1)">+1</span>
+            <span onclick="adjustCounter('dragon', 10)">+10</span>
+          </div>
+        </div>
+
+        <div class="counter-icons-row">
+          <button class="counter-icon-btn plus" onclick="adjustCounterIcon('dragon','plus')" title="Add with icon">
+            <img src="assets/dragon-plus-icon.webp" alt="Dragon plus icon">
+            <span class="counter-icon-label">+1</span>
+            <span class="counter-icon-badge" id="plusIconCount_dragon">0</span>
+          </button>
+          <button class="counter-icon-btn minus" onclick="adjustCounterIcon('dragon','minus')" title="Subtract with icon">
+            <img class="dragon-minus-img" src="assets/dragon-minus-icon.webp" alt="Dragon minus icon">
+            <span class="counter-icon-label">-1</span>
+            <span class="counter-icon-badge" id="minusIconCount_dragon">0</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="chance-section" id="chanceSection"></div>
+
+      <div class="stats-container">
+        <div class="stat-pill"><span data-i18n="rollsTodayLabel">Rolls Today:</span> <span id="rollsTodayCount">0</span> 🎲</div>
+        <div class="small-grey-text">
+          <span data-i18n="possibleColorsIntro">Possible colors are:</span> <span class="c-red">Red</span>, <span class="c-orange">Orange</span>, <span class="c-yellow">Yellow</span>, <span class="c-green">Green</span>, <span class="c-blue">Blue</span> and <span class="c-purple">Purple</span>.
+        </div>
+      </div>
+
+      <div class="history-section">
+        <div class="history-title" data-i18n="colorStatsTitle">Color Stats:</div>
+        <div id="rollStatsRow" class="roll-stats-row"></div>
+        <div class="history-title" style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+          <span data-i18n="lastRollsLabel">Last Rolls:</span>
+          <button id="searchIdToggleBtn" class="search-id-btn" onclick="toggleSearchIdBox()" data-i18n="searchIdBtn">🔍 Search ID</button>
+        </div>
+        <div id="searchIdBox" class="search-id-box hidden">
+          <input type="text" id="searchIdInput" placeholder="Enter Game ID..." maxlength="8" onkeydown="if(event.key==='Enter') searchRollById()" data-i18n-placeholder="searchIdPlaceholder">
+          <button onclick="searchRollById()" data-i18n="goBtn">Go</button>
+        </div>
+        <div id="searchIdResult" class="search-id-result"></div>
+        <div id="inlineHistoryList" class="inline-history-list"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="rollOverlay" class="roll-overlay hidden">
+    <h2 id="overlayTitle" class="overlay-title" data-i18n="rollingOverlay">ROLLING...</h2>
+    <div id="overlayDiceContainer" class="overlay-dice-container"></div>
+  </div>
+
+  <div id="settingsModal" class="settings-modal-overlay">
+    <div class="settings-card">
+      <div class="settings-header">
+        <h2>⚙️ <span data-i18n="settingsTitle">Settings</span></h2>
+        <button class="close-btn" onclick="closeSettings()">&times;</button>
+      </div>
+
+      <div>
+        <div class="setting-section-title" data-i18n="themesTitle">Themes</div>
+        <div class="bg-grid theme-grid">
+          <div class="bg-card animated-preview active-bg" style="background: linear-gradient(120deg, #2b0a3d, #6a0dad, #ff2fb0, #00e5ff);" onclick="applyTheme('animated','linear-gradient(120deg, #2b0a3d, #6a0dad, #ff2fb0, #00e5ff)',this)">Aurora Dream</div>
+          <div class="bg-card animated-preview" style="background: linear-gradient(120deg, #ff5f6d, #ff9068, #ffc371, #ff2f92);" onclick="applyTheme('animated','linear-gradient(120deg, #ff5f6d, #ff9068, #ffc371, #ff2f92)',this)">Sunset Blaze</div>
+          <div class="bg-card animated-preview" style="background: linear-gradient(120deg, #001f3f, #005f73, #0083b0, #00e5c9);" onclick="applyTheme('animated','linear-gradient(120deg, #001f3f, #005f73, #0083b0, #00e5c9)',this)">Ocean Aurora</div>
+          <div class="bg-card animated-preview" style="background: linear-gradient(120deg, #ff512f, #f09819, #ffd200, #ff512f);" onclick="applyTheme('animated','linear-gradient(120deg, #ff512f, #f09819, #ffd200, #ff512f)',this)">Golden Fire</div>
+          <div class="bg-card animated-preview" style="background: linear-gradient(120deg, #0f0c29, #302b63, #a63aff, #ff00cc);" onclick="applyTheme('animated','linear-gradient(120deg, #0f0c29, #302b63, #a63aff, #ff00cc)',this)">Cosmic Galaxy</div>
+          <div class="bg-card animated-preview" style="background: linear-gradient(120deg, #0f2027, #203a43, #2c5364, #43e97b);" onclick="applyTheme('animated','linear-gradient(120deg, #0f2027, #203a43, #2c5364, #43e97b)',this)">Emerald Glow</div>
+          <div class="bg-card animated-preview" style="background: linear-gradient(120deg, #ff71ce, #b967ff, #01cdfe, #ff71ce);" onclick="applyTheme('animated','linear-gradient(120deg, #ff71ce, #b967ff, #01cdfe, #ff71ce)',this)">Neon Candy</div>
+          <div class="bg-card animated-preview" style="background: linear-gradient(120deg, #1a0000, #660000, #d10000, #ff5e3a);" onclick="applyTheme('animated','linear-gradient(120deg, #1a0000, #660000, #d10000, #ff5e3a)',this)">Crimson Blaze</div>
+          <div class="bg-card animated-preview" style="background: linear-gradient(120deg, #2b0000, #8b0000, #ff1e1e, #ff8c00);" onclick="applyTheme('animated','linear-gradient(120deg, #2b0000, #8b0000, #ff1e1e, #ff8c00)',this)">Scarlet Storm</div>
+          <div class="bg-card animated-preview" style="background: linear-gradient(120deg, #001014, #013a4d, #00b4d8, #90e0ef);" onclick="applyTheme('animated','linear-gradient(120deg, #001014, #013a4d, #00b4d8, #90e0ef)',this)">Frost Teal</div>
+          <div class="bg-card animated-preview" style="background: linear-gradient(120deg, #0b3d02, #2e7d32, #aeea00, #f4ff81);" onclick="applyTheme('animated','linear-gradient(120deg, #0b3d02, #2e7d32, #aeea00, #f4ff81)',this)">Toxic Lime</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="setting-section-title" data-i18n="staticThemesTitle">Static Themes</div>
+        <div class="bg-grid">
+          <div class="bg-card" style="background: #1a0505;" onclick="applyTheme('static','#1a0505',this)">Crimson Void</div>
+          <div class="bg-card" style="background: #4d0000;" onclick="applyTheme('static','#4d0000',this)">Blood Moon</div>
+          <div class="bg-card" style="background: #3a0d10;" onclick="applyTheme('static','#3a0d10',this)">Garnet Ash</div>
+          <div class="bg-card" style="background: #2e0a14;" onclick="applyTheme('static','#2e0a14',this)">Wine Night</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="setting-section-title" data-i18n="specialBackgroundTitle">Special Background</div>
+        <div class="bg-grid special-grid">
+          <div class="bg-card image-preview" style="background-image: url('assets/bg-sab-blue.jpg');" onclick="applyTheme('image','assets/bg-sab-blue.jpg',this)"><span class="bg-card-label">SAB Blue</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="setting-section-title" data-i18n="immersiveThemesTitle">✦ Immersive Themes (re-skins the whole site)</div>
+        <div class="bg-grid immersive-grid">
+          <div class="bg-card immersive-preview" data-theme-key="imm-neon-inferno" style="background: linear-gradient(135deg, #1a0033, #ff0059, #ff8c00, #1a0033);" onclick="applyImmersiveTheme('imm-neon-inferno', this)">Neon Inferno</div>
+          <div class="bg-card immersive-preview" data-theme-key="imm-cyber-grid" style="background: linear-gradient(135deg, #00050f, #0033ff, #00e5ff, #7b2fff);" onclick="applyImmersiveTheme('imm-cyber-grid', this)">Cyber Grid</div>
+          <div class="bg-card immersive-preview" data-theme-key="imm-toxic-jungle" style="background: linear-gradient(135deg, #041a05, #1e8c1e, #d4ff00, #041a05);" onclick="applyImmersiveTheme('imm-toxic-jungle', this)">Toxic Jungle</div>
+          <div class="bg-card immersive-preview" data-theme-key="imm-royal-eclipse" style="background: linear-gradient(135deg, #0d0015, #3a0d5e, #b8860b, #ffd700);" onclick="applyImmersiveTheme('imm-royal-eclipse', this)">Royal Eclipse</div>
+          <div class="bg-card immersive-preview" data-theme-key="imm-arctic-pulse" style="background: linear-gradient(135deg, #00131a, #0083b0, #90e0ef, #ffffff);" onclick="applyImmersiveTheme('imm-arctic-pulse', this)">Arctic Pulse</div>
+          <div class="bg-card immersive-preview" data-theme-key="imm-void-walker" style="background: linear-gradient(135deg, #000000, #2b0033, #ff00e5, #000000);" onclick="applyImmersiveTheme('imm-void-walker', this)">Void Walker</div>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <label data-i18n="fontsLabel">Fonts</label>
+        <select id="fontSelect" onchange="changeFont(this.value)">
+          <option value="'Outfit', sans-serif">Outfit (Default Modern)</option>
+          <option value="'Montserrat', sans-serif">Montserrat (Bold Clean)</option>
+          <option value="'Russo One', sans-serif">Russo One (Arcade Heavy)</option>
+          <option value="'Righteous', cursive">Righteous (Futuristic)</option>
+          <option value="'Press Start 2P', cursive">Press Start 2P (Retro 8-Bit)</option>
+          <option value="'Fredoka', sans-serif">Fredoka (Round & Friendly)</option>
+          <option value="'Luckiest Guy', cursive">Luckiest Guy (Comic)</option>
+          <option value="'Lilita One', cursive">Lilita One (Pop 3D)</option>
+          <option value="'Impact', sans-serif">Impact (Classic)</option>
+          <option value="'Bangers', cursive">Bangers (Comic Book)</option>
+          <option value="'Bungee', cursive">Bungee (Street Sign)</option>
+          <option value="'Permanent Marker', cursive">Permanent Marker (Handwritten)</option>
+          <option value="'Anton', sans-serif">Anton (Bold Condensed)</option>
+          <option value="'Orbitron', sans-serif">Orbitron (Sci-Fi)</option>
+          <option value="'Baloo 2', cursive">Baloo 2 (Playful Rounded)</option>
+          <option value="'VT323', monospace">VT323 (Pixel Terminal)</option>
+          <option value="'Rubik Mono One', sans-serif">Rubik Mono One (Ultra Bold)</option>
+          <option value="'Passion One', cursive">Passion One (Chunky Display)</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <label><span data-i18n="soundVolumeLabel">Sound Volume</span> (<span id="volumeVal">80</span>%)</label>
+        <input type="range" id="volumeSlider" min="0" max="100" value="80" oninput="changeVolume(this.value)">
+      </div>
+
+    </div>
+  </div>
+
+  <div id="supportModal" class="settings-modal-overlay">
+    <div class="settings-card support-card">
+      <div class="settings-header">
+        <h2>💬 <span data-i18n="supportTitle">Support</span></h2>
+        <button class="close-btn" onclick="closeSupport()">&times;</button>
+      </div>
+
+      <p class="support-text" data-i18n="supportChannelText">Если у вас возникли вопросы или идеи для сайта переходите в наш тгк</p>
+      <a href="https://t.me/StealaBekonTwo" target="_blank" rel="noopener noreferrer" class="support-tg-link">✈️ t.me/StealaBekonTwo</a>
+
+      <p class="support-text" data-i18n="supportBotText">Или напишите напрямую нашему боту поддержки:</p>
+      <a href="https://t.me/StealBekonSupportbot" target="_blank" rel="noopener noreferrer" class="support-tg-link support-bot-link">🤖 t.me/StealBekonSupportbot</a>
+    </div>
+  </div>
+
+  <div id="languageModal" class="settings-modal-overlay">
+    <div class="settings-card language-card">
+      <div class="settings-header">
+        <h2>🌐 <span data-i18n="languageTitle">Language</span></h2>
+        <button class="close-btn" onclick="closeLanguageModal()">&times;</button>
+      </div>
+      <div class="lang-grid">
+        <button class="lang-option" onclick="setLanguage('ru')">🇷🇺 Русский</button>
+        <button class="lang-option" onclick="setLanguage('uk')">🇺🇦 Українська</button>
+        <button class="lang-option" onclick="setLanguage('en')">🇬🇧 English</button>
+        <button class="lang-option" onclick="setLanguage('de')">🇩🇪 Deutsch</button>
+        <button class="lang-option" onclick="setLanguage('fr')">🇫🇷 Français</button>
+        <button class="lang-option" onclick="setLanguage('es')">🇪🇸 Español</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
